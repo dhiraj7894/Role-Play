@@ -3,7 +3,7 @@ using System;
 
 public class VideoPlayer : MonoBehaviour
 {
-    public static VideoPlayer insternce{get;private set;}
+    public static VideoPlayer Insternce{get;private set;}
     [SerializeField] private UnityEngine.Video.VideoPlayer videoPlayer; 
     [SerializeField] private UnityEngine.Video.VideoClip videoClip;
     [SerializeField] private RectTransform videoPlayerRawImage;
@@ -16,7 +16,7 @@ public class VideoPlayer : MonoBehaviour
     public static event EventHandler OnVideoCompletePlay;
     public static event EventHandler OnVideoPlay;
     private void Awake() {
-        insternce=this;
+        Insternce=this;
     }
     void Start()
     {
@@ -36,7 +36,8 @@ public class VideoPlayer : MonoBehaviour
     public void VideoPlay(){
         OnVideoPlay?.Invoke(this, EventArgs.Empty);
         RenderTextureRelease();
-        PlayVideo(videoClip, videoSpeed, SetVideoComplete);        
+        PlayVideo(videoClip, videoSpeed, SetVideoComplete);    
+        
         //Below code is to skip starting long video
         //videoPlayer.frame = (long)videoPlayer.frameCount;
     }
@@ -49,7 +50,7 @@ public class VideoPlayer : MonoBehaviour
         videoPlayer.clip = null;        
         OnVideoCompletePlay?.Invoke(this, EventArgs.Empty);
         videoSpeed = 1;
-        ScaleManagementOfVideoPlayerRawImage(new Vector2(1164, 645), new Vector3(-325f, 0, 0));        
+        ScaleManagementOfVideoPlayerRawImage(new Vector2(1164, 645), new Vector3(-325f, 27f, 0));        
         videoPlayer.loopPointReached -= SetVideoComplete;
     }
 

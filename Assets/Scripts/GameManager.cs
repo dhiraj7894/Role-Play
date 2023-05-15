@@ -3,8 +3,8 @@ using UnityEngine.SceneManagement;
 using RP;
 public class GameManager : Singleton<GameManager> {
 
+    [SerializeField] private TargetArrowCharacters _targetArrowCharacters;
     [SerializeField] private Transform restartButton;
-
 
     private void Start()
     {
@@ -13,8 +13,9 @@ public class GameManager : Singleton<GameManager> {
     }
     public void RestartScene()
     {
-        VideoPlayer.insternce.RenderTextureRelease();
+        VideoPlayer.Insternce.RenderTextureRelease();
         VideoManager.Instance.DeRegisterEvents();
+        _targetArrowCharacters.DeRegisterEvent();
         SceneManager.LoadScene(0);
     }
 

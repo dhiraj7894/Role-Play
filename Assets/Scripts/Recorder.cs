@@ -245,13 +245,13 @@ public class Recorder : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
     public void StartRecording()
     {
         OnRecordingEventStart?.Invoke(this, EventArgs.Empty);
-        RecordTimer.Instance.StartTimer();
         OnRecordingStart();
         recordingTime = 0f;
         isRecording = true;
 
-        StartCoroutine(ScaleOverTime(RecordButton.gameObject, 1.1f));
+        RecordTimer.Instance.StartTimer();
         
+        StartCoroutine(ScaleOverTime(RecordButton.gameObject, 1.1f));
         audioSource.clip = Microphone.Start(Microphone.devices[0], false, timeToRecord, 44100);
     }
 
@@ -452,7 +452,7 @@ public class Recorder : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
     }
     private void OnEnable()
     {
-        Debug.Log(VideoManager.Instance.AudioFileNumber);
+        //Debug.Log(VideoManager.Instance.AudioFileNumber);
         //NextButton.interactable = false;
     }
     public void GetAudioName(string name)

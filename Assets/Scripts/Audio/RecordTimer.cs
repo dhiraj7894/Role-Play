@@ -16,9 +16,8 @@ public class RecordTimer : Singleton<RecordTimer> {
     }
     public void StartTimer()
     {
-        VideoPlayer.insternce.ContinuePlaying();
-        Recorder.timeToRecord = (int)recordingLength;
-        duration = (int)recordingLength;        
+        VideoPlayer.Insternce.ContinuePlaying();         
+        Recorder.timeToRecord =duration = (int)recordingLength;        
         StartCoroutine(Timer());
     }
     public void StopTimer()
@@ -33,11 +32,13 @@ public class RecordTimer : Singleton<RecordTimer> {
     }
 
     IEnumerator Timer()
-    {        
-        while(duration >= 0)
+    {
+        while (duration > 0)
         {
+            //Debug.Log(duration);
             recordingTimerText.text = $"{duration / 60:00}:{duration % 60:00}";
             duration--;
+            
             yield return new WaitForSeconds(1);
         }
     }
@@ -45,6 +46,18 @@ public class RecordTimer : Singleton<RecordTimer> {
     public float GetRecordingLength(float time)
     {
         return recordingLength = time;
+    }
+
+    public TextMeshProUGUI GetRecordingTimerText
+    {
+        get
+        {
+            return recordingTimerText;
+        }
+        set
+        {
+            recordingTimerText = value;
+        }
     }
    
 
