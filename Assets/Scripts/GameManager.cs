@@ -4,16 +4,17 @@ using RP;
 public class GameManager : Singleton<GameManager> {
 
     [SerializeField] private TargetArrowCharacters _targetArrowCharacters;
-    [SerializeField] private Transform restartButton;
+    [SerializeField] private VideoMergePlayer _videoMerger;
+    [SerializeField] private Transform _restartPanal;
 
     private void Start()
     {
         Application.targetFrameRate = 60;
-        restartButton.gameObject.SetActive(false);
+        _restartPanal.gameObject.SetActive(false);
     }
     public void RestartScene()
     {
-        VideoPlayer.Insternce.RenderTextureRelease();
+        VideoPlayer.Instance.RenderTextureRelease();
         VideoManager.Instance.DeRegisterEvents();
         _targetArrowCharacters.DeRegisterEvent();
         SceneManager.LoadScene(0);
@@ -21,6 +22,11 @@ public class GameManager : Singleton<GameManager> {
 
     public void EnableRestartOption()
     {
-        restartButton.gameObject.SetActive(true);
+        _restartPanal.gameObject.SetActive(true);        
     }
+    public void EnableCombinedVideoPlayerUI(){
+        _targetArrowCharacters.OnEnableArrowUI(false);
+        _videoMerger.onMergerEnable(true);
+    }
+
 }

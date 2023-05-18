@@ -32,4 +32,8 @@ public class TargetArrowCharacters : MonoBehaviour {
         VideoPlayerInParts.OnTargetSetToCH1 -= VideoPlayerInParts_OnTargetSetToCH1;
         VideoPlayerInParts.OnTargetSetToCH2 -= VideoPlayerInParts_OnTargetSetToCH2;
     }
+
+    public void OnEnableArrowUI(bool isTrue){
+        _arrowUI.gameObject.SetActive(isTrue);
+    }
 }

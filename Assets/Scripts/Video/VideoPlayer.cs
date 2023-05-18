@@ -1,9 +1,10 @@
 using UnityEngine;
 using System;
+using RP;
 
-public class VideoPlayer : MonoBehaviour
+public class VideoPlayer : Singleton<VideoPlayer>
 {
-    public static VideoPlayer Insternce{get;private set;}
+    //public static VideoPlayer Instance{get;private set;}
     [SerializeField] private UnityEngine.Video.VideoPlayer videoPlayer; 
     [SerializeField] private UnityEngine.Video.VideoClip videoClip;
     [SerializeField] private RectTransform videoPlayerRawImage;
@@ -16,7 +17,7 @@ public class VideoPlayer : MonoBehaviour
     public static event EventHandler OnVideoCompletePlay;
     public static event EventHandler OnVideoPlay;
     private void Awake() {
-        Insternce=this;
+        //Instance=this;
     }
     void Start()
     {

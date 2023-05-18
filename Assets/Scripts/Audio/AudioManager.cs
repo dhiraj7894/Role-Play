@@ -2,17 +2,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using RP;
 
+[RequireComponent(typeof(AudioSource))]
 public class AudioManager : Singleton<AudioManager>
 {
-    [SerializeField] private AudioSource audioSource;
-    [SerializeField] private Transform container;
-    [SerializeField] private Transform audioTamplate;
+    [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private Transform _container;
+    [SerializeField] private Transform _audioTamplate;
 
     public List<AudioClip> audioClips = new List<AudioClip>();
 
     private void Awake()
     {
-        audioTamplate.gameObject.SetActive(false);
+        _audioTamplate.gameObject.SetActive(false);
     }
 
     private void Start()
@@ -22,24 +23,21 @@ public class AudioManager : Singleton<AudioManager>
 
     public void UpdateVisual()
     {
-        foreach (Transform item in container)
+        foreach (Transform item in _container)
         {
-            if (item == audioTamplate) continue;
+            if (item == _audioTamplate) continue;
             Destroy(item.gameObject);
         }
 
         foreach (AudioClip aClip in audioClips)
         {
-            Transform audioTransform = Instantiate(audioTamplate, container);
+            Transform audioTransform = Instantiate(_audioTamplate, _container);
             audioTransform.gameObject.SetActive(true);
             audioTransform.GetComponent<AudioPlayerButton>().SetAudioTamplateName(aClip.name);
         }
     }
 
-/*    public void UpdateName(string audio)
-    {
-        //audioTransform.name = audio;
-    }*/
+
 
     public void PlayAudio(string audio)
     {
@@ -48,18 +46,20 @@ public class AudioManager : Singleton<AudioManager>
         {
             if(item.name == audio)
             {
-                audioSource.clip = item;
-                audioSource.Play();
+                _audioSource.clip = item;
+                _audioSource.Play();
                 
             }
         }
-        
+    }
 
-        /*
-        if (AudioClips.Count > 0)
-        {
-            AudioSource.clip = AudioClips[0];
-            AudioSource.Play();
-        }*/
+    public void PlayAudio(int ID){
+        if(audioClips.Count > 0){
+            _audioSource.clip = audioClips[ID];
+            _audioSource.Play(); 
+        }else{
+            Debug.LogError("Audio list is empty.");
+        }
+               
     }
 }

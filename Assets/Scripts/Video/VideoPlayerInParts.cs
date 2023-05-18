@@ -1,21 +1,21 @@
 using UnityEngine;
 using System;
 
-public enum Role
-{
+public enum Role{
     character1,
     character2
 }
+
 public class VideoPlayerInParts : MonoBehaviour
 {
-    
 
-    [SerializeField] Role role;
+
+    [SerializeField] Role _currentRole;
     [SerializeField] VideoManager manager;
     [SerializeField] private int RecordingCount;
     [SerializeField] private float currentVideoLength;
 
-    private int _videoID;
+    [SerializeField] private int _videoID;
 
 
     public static event EventHandler OnTargetSetToCH1;
@@ -34,20 +34,19 @@ public class VideoPlayerInParts : MonoBehaviour
             Debug.Log(" First Character is Customer so start recording");
             ShowRecordingOption(0);
             OnTargetSetToCH1?.Invoke(this, EventArgs.Empty);
-            role = Role.character1;
+            _currentRole = Role.character1;
         }
         else
         {
             Debug.Log(" First Character is Seller");
-            VideoPlayer.Insternce.PlayVideo(VideoManager.Instance.videoClipsParts[0], 1, OnVideoComplete);
+            VideoPlayer.Instance.PlayVideo(VideoManager.Instance.videoClipsParts[0], 1, OnVideoComplete);
             RecordTimer.Instance.GetRecordingStatus = true;
             manager.EnableRecordingButton(false);
             OnTargetSetToCH2?.Invoke(this, EventArgs.Empty);
-            role = Role.character2;
+            _currentRole = Role.character2;
         }
         
     }
-
     private void OnCharacter2Choosen(object sender, System.EventArgs e)
     {
         
@@ -56,16 +55,16 @@ public class VideoPlayerInParts : MonoBehaviour
             Debug.Log(" First Character is seller so start recording");            
             ShowRecordingOption(0);
             OnTargetSetToCH2?.Invoke(this, EventArgs.Empty);
-            role = Role.character2;
+            _currentRole = Role.character2;
         }
         else
         {
             Debug.Log(" First Character is Customer");
-            VideoPlayer.Insternce.PlayVideo(VideoManager.Instance.videoClipsParts[0], 1, OnVideoComplete);
+            VideoPlayer.Instance.PlayVideo(VideoManager.Instance.videoClipsParts[0], 1, OnVideoComplete);
             RecordTimer.Instance.GetRecordingStatus = true;
             manager.EnableRecordingButton(false);
             OnTargetSetToCH1?.Invoke(this, EventArgs.Empty);
-            role = Role.character1;
+            _currentRole = Role.character1;
         }
     }
 
@@ -74,7 +73,7 @@ public class VideoPlayerInParts : MonoBehaviour
     public void PlayVideoOnLoop()
     {
 
-        switch (role)
+        switch (_currentRole)
         {
             case Role.character1:
                 if (VideoManager.Instance.isCharacter1)
@@ -111,43 +110,51 @@ public class VideoPlayerInParts : MonoBehaviour
 
     private void OnVideoComplete(UnityEngine.Video.VideoPlayer vp)
     {
-        VideoPlayer.Insternce.RemoveEvent(OnVideoComplete);
+        VideoPlayer.Instance.RemoveEvent(OnVideoComplete);
         _videoID++;
-        role = role == Role.character1 ? role = Role.character2 : role = Role.character1;
-        if (manager.videoClipsParts.Count > _videoID) { PlayVideoOnLoop(); } else { GameManager.Instance.EnableRestartOption(); }
+        _currentRole = _currentRole == Role.character1 ? _currentRole = Role.character2 : _currentRole = Role.character1;
+        if (manager.videoClipsParts.Count > _videoID) { PlayVideoOnLoop(); } 
+        else { 
+            //GameManager.Instance.EnableRestartOption(); 
+            GameManager.Instance.EnableCombinedVideoPlayerUI(); 
+            
+            }
     }
 
 
     private void OnRecordingVideoComplete(UnityEngine.Video.VideoPlayer vp)
     {
         //Debug.Log("Waiting for player Input");
-        VideoPlayer.Insternce.RemoveEvent(OnRecordingVideoComplete);
+        VideoPlayer.Instance.RemoveEvent(OnRecordingVideoComplete);
     }
     
     public void NextButton()
     {
         RecordingCount++;
         _videoID++;
-        role = role == Role.character1 ? role = Role.character2 : role = Role.character1;
+        _currentRole = _currentRole == Role.character1 ? _currentRole = Role.character2 : _currentRole = Role.character1;
       
         VideoManager.Instance.AudioFileNumber = RecordingCount;
-        if (manager.videoClipsParts.Count > _videoID) { PlayVideoOnLoop(); } else { GameManager.Instance.EnableRestartOption(); }
+        if (manager.videoClipsParts.Count > _videoID) { PlayVideoOnLoop(); } else { 
+            //GameManager.Instance.EnableRestartOption(); 
+            GameManager.Instance.EnableCombinedVideoPlayerUI(); 
+            }
     }
 
     public void ShowRecordingOption(int ID)
     {
         manager.EnableRecordingButton(true);
         RecordTimer.Instance.GetRecordingStatus = false;
-        VideoPlayer.Insternce.PlayVideo(VideoManager.Instance.videoClipsParts[ID], 1, OnRecordingVideoComplete, true);
+        VideoPlayer.Instance.PlayVideo(VideoManager.Instance.videoClipsParts[ID], 1, OnRecordingVideoComplete, true);
         currentVideoLength = (float)VideoManager.Instance.videoClipsParts[ID].length;
         RecordTimer.Instance.GetRecordingLength(currentVideoLength);
-        VideoPlayer.Insternce.PauseVideo();
+        VideoPlayer.Instance.PauseVideo();
     }
 
     public void OtherCharacterVideoPlay()
     {
         manager.EnableRecordingButton(false);
-        VideoPlayer.Insternce.PlayVideo(VideoManager.Instance.videoClipsParts[_videoID], 1, OnVideoComplete);
+        VideoPlayer.Instance.PlayVideo(VideoManager.Instance.videoClipsParts[_videoID], 1, OnVideoComplete);
     }
 
     public void DeRegisterEvents()
@@ -155,5 +162,11 @@ public class VideoPlayerInParts : MonoBehaviour
         VideoManager.onCharacter1Choosen -= OnCharacter1Choosen;
         VideoManager.onCharacter2Choosen -= OnCharacter2Choosen;
     }
+
+    public  int VideoID{
+        get{return _videoID;}
+        set{_videoID = value;}
+    }
+
     
 }

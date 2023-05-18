@@ -16,7 +16,7 @@ public class RecordTimer : Singleton<RecordTimer> {
     }
     public void StartTimer()
     {
-        VideoPlayer.Insternce.ContinuePlaying();         
+        VideoPlayer.Instance.ContinuePlaying();         
         Recorder.timeToRecord =duration = (int)recordingLength;        
         StartCoroutine(Timer());
     }

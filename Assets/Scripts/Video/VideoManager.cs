@@ -97,7 +97,7 @@ public class VideoManager : Singleton<VideoManager>
 
     public void EnableRecordingPanal()
     {
-        if (recordingPanal.gameObject.activeSelf == false) recordingPanal.gameObject.SetActive(true);
+        if (recordingPanal.gameObject.activeSelf == false) recordingPanal.gameObject.SetActive(true);else{recordingPanal.gameObject.SetActive(false);}
     }
     public void ContinueVideoPlayer()
     {
